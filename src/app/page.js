@@ -1,125 +1,161 @@
-import {
-  TrendingUp,
-  Users,
-  ShoppingCart,
-  DollarSign,
-  Package,
-  ArrowUpRight,
-  Activity
-} from "lucide-react";
+'use client';
 
-export default function Home() {
-  const stats = [
-    { label: "Total Revenue", value: "$45,231", change: "+20.1%", icon: DollarSign, color: "text-green-600" },
-    { label: "Orders", value: "1,234", change: "+15.3%", icon: ShoppingCart, color: "text-blue-600" },
-    { label: "Customers", value: "856", change: "+8.2%", icon: Users, color: "text-purple-600" },
-    { label: "Products", value: "342", change: "+12.5%", icon: Package, color: "text-orange-600" },
-  ];
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Mail, Lock, Eye, EyeOff, Shield, Sparkles } from 'lucide-react';
 
-  const recentOrders = [
-    { id: "#3210", customer: "John Doe", amount: "$89.99", status: "Completed" },
-    { id: "#3209", customer: "Jane Smith", amount: "$156.50", status: "Processing" },
-    { id: "#3208", customer: "Mike Johnson", amount: "$234.00", status: "Shipped" },
-  ];
+export default function LoginPage() {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Static credentials
+  const STATIC_EMAIL = 'infowebutsav@gmail.com';
+  const STATIC_PASSWORD = 'infowebutsav@123';
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    if (email === STATIC_EMAIL && password === STATIC_PASSWORD) {
+      // Successful login - redirect to dashboard
+      router.push('/dashboard');
+    } else {
+      setError('Invalid email or password. Please try again.');
+    }
+
+    setIsLoading(false);
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back! 👋
-          </h1>
-          <p className="text-gray-600">
-            Here's what's happening with your store today.
-          </p>
-        </div>
-        <div className="mt-4 sm:mt-0">
-          <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2" />
-            View Analytics
-          </button>
-        </div>
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-[#ff512f]">
+      {/* Enhanced Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden z-0">
+        {/* Large animated gradient blobs */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-br from-pink-400/40 via-yellow-300/30 to-purple-600/40 rounded-full blur-3xl animate-pulse" style={{animationDuration:'5s'}}></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-br from-blue-400/40 via-green-300/30 to-indigo-600/40 rounded-full blur-3xl animate-pulse" style={{animationDuration:'7s'}}></div>
+        {/* Subtle overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/20 pointer-events-none"></div>
+        {/* Floating shapes */}
+        <div className="absolute top-1/4 left-1/3 w-24 h-24 bg-gradient-to-tr from-fuchsia-400/30 to-cyan-400/30 rounded-full blur-2xl animate-bounce" style={{animationDuration:'6s'}}></div>
+        <div className="absolute bottom-1/3 right-1/4 w-20 h-20 bg-gradient-to-tr from-yellow-400/30 to-pink-400/30 rounded-full blur-2xl animate-bounce delay-1000" style={{animationDuration:'8s'}}></div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const IconComponent = stat.icon;
-          return (
-            <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm hover:shadow-lg transition-all duration-300 hover:transform hover:scale-105">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl ${stat.color} bg-opacity-10`}>
-                  <IconComponent className={`w-6 h-6 ${stat.color}`} />
+      {/* Login Card */}
+      <div className="relative w-full max-w-md">
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+          <div className="absolute -top-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full blur-xl"></div>
+          <div className="absolute -bottom-2 -left-2 w-16 h-16 bg-gradient-to-br from-green-400/20 to-blue-500/20 rounded-full blur-xl"></div>
+
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2 flex items-center justify-center gap-2">
+              WebUtsav Admin
+              <Sparkles className="w-6 h-6 text-yellow-400" />
+            </h1>
+            <p className="text-white/70 text-sm">
+              Welcome back! Please sign in to continue.
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-white/90 text-sm font-medium block">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-white/50" />
                 </div>
-                <span className={`text-sm font-semibold ${stat.color} flex items-center`}>
-                  {stat.change}
-                  <ArrowUpRight className="w-4 h-4 ml-1" />
-                </span>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                <p className="text-gray-600 text-sm">{stat.label}</p>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
+                  placeholder="Enter your email"
+                  required
+                />
               </div>
             </div>
-          );
-        })}
-      </div>
 
-      {/* Dashboard Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Orders */}
-        <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
-            <button className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center">
-              View All
-              <ArrowUpRight className="w-4 h-4 ml-1" />
-            </button>
-          </div>
-          <div className="space-y-4">
-            {recentOrders.map((order, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50/50 rounded-xl hover:bg-gray-100/50 transition-colors duration-200">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
-                    {order.id.slice(-2)}
-                  </div>
-                  <div className="ml-4">
-                    <p className="font-semibold text-gray-900">{order.customer}</p>
-                    <p className="text-gray-600 text-sm">{order.id}</p>
-                  </div>
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-white/90 text-sm font-medium block">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-white/50" />
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold text-gray-900">{order.amount}</p>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    order.status === 'Completed' ? 'bg-green-100 text-green-700' :
-                    order.status === 'Processing' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-blue-100 text-blue-700'
-                  }`}>
-                    {order.status}
-                  </span>
-                </div>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/50 hover:text-white/80 transition-colors duration-200"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-          <div className="space-y-4">
-            <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
-              <Package className="w-5 h-5 mr-2" />
-              Add Product
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-3 text-red-200 text-sm text-center backdrop-blur-sm">
+                {error}
+              </div>
+            )}
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <Shield className="w-5 h-5" />
+                  Sign In
+                </>
+              )}
             </button>
-            <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
-              <Users className="w-5 h-5 mr-2" />
-              Manage Users
-            </button>
-            <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
-              <Activity className="w-5 h-5 mr-2" />
-              View Reports
-            </button>
+          </form>
+
+          {/* Demo Credentials */}
+
+
+          {/* Footer */}
+          <div className="mt-6 text-center">
+            <p className="text-white/50 text-xs">
+              © 2024 WebUtsav. All rights reserved.
+            </p>
           </div>
         </div>
       </div>

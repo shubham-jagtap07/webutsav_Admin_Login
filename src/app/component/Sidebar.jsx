@@ -9,7 +9,8 @@ import {
   ChevronRight,
   Sparkles,
   Briefcase,
-  FileText
+  FileText,
+  Users
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -57,7 +58,11 @@ const Sidebar = () => {
         {/* Logo/Brand */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
           <div className="flex items-center group cursor-pointer">
-            <div className="relative w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+            <div className="relative w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105"
+            onClick={() => router.push('/dashboard')}
+            
+            
+            >
               <ShoppingBag className="w-6 h-6 text-white drop-shadow-sm" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl"></div>
             </div>
@@ -182,9 +187,52 @@ const Sidebar = () => {
                 )}
               </button>
 
+
+              <button
+                onClick={() => handleNavigation('/visitors')}
+                className={`relative flex items-center px-4 py-3.5 transition-all duration-300 rounded-xl mx-3 group overflow-hidden w-full ${
+                  pathname === '/visitors'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 transform scale-[1.02]'
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:shadow-md hover:transform hover:scale-[1.01]'
+                }`}
+              >
+                {pathname === '/visitors' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-xl blur-sm"></div>
+                )}
+                <Users className={`relative w-5 h-5 mr-3 transition-all duration-300 ${
+                  pathname === '/visitors'
+                    ? 'text-white drop-shadow-sm'
+                    : 'text-gray-500 group-hover:text-blue-600 group-hover:scale-110'
+                }`} />
+                <span className={`relative font-medium transition-all duration-300 ${
+                  pathname === '/visitors' ? 'text-white' : 'group-hover:font-semibold'
+                }`}>
+                  All Visitors
+                </span>
+                {pathname === '/visitors' && (
+                  <div className="relative ml-auto flex items-center">
+                    <div className="w-2 h-2 bg-white rounded-full shadow-sm"></div>
+                  </div>
+                )}
+                {pathname !== '/visitors' && (
+                  <ChevronRight className="relative ml-auto w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                )}
+              </button>
+
             </div>
           </div>
+
         </nav>
+        {/* Logout Button */}
+        <div className="px-6 pb-6">
+          <button
+            onClick={() => router.push('/')}
+            className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 mt-4"
+          >
+            <X className="w-5 h-5" />
+            Logout
+          </button>
+        </div>
 
         {/* Footer */}
         {/* <div className="p-4 border-t border-gray-200/50">

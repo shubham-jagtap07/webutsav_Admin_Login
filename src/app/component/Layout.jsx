@@ -1,7 +1,18 @@
+'use client';
+
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 
 const Layout = ({ children }) => {
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/';
+
+  // If it's the login page, render without sidebar and layout wrapper
+  if (isLoginPage) {
+    return children;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Sidebar />
@@ -9,7 +20,7 @@ const Layout = ({ children }) => {
         {/* Header/Top Bar */}
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm lg:hidden">
           <div className="px-4 py-3">
-            <h1 className="text-lg font-semibold text-gray-800">ShopApp Admin</h1>
+            <h1 className="text-lg font-semibold text-gray-800">WebUtsav Admin</h1>
           </div>
         </header>
 
