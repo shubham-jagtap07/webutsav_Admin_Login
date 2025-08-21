@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getUnreadInquiryCount, getUnreadInquiries } from '../../services/inquiryService';
 import {
   TrendingUp,
   Users,
@@ -12,7 +13,10 @@ import {
   Activity,
   Briefcase,
   Clock,
-  MapPin
+  MapPin,
+  MessageSquare,
+  Mail,
+  AlertCircle
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -20,6 +24,9 @@ export default function Dashboard() {
   const [recentJobs, setRecentJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [unreadInquiryCount, setUnreadInquiryCount] = useState(0);
+  const [recentInquiries, setRecentInquiries] = useState([]);
+  const [inquiryLoading, setInquiryLoading] = useState(true);
 
   // Fetch active jobs from API
   const fetchActiveJobs = async () => {
@@ -56,9 +63,27 @@ export default function Dashboard() {
     }
   };
 
-  // Load jobs on component mount
+  // Fetch inquiry data
+  const fetchInquiryData = async () => {
+    try {
+      setInquiryLoading(true);
+      const [countData, unreadData] = await Promise.all([
+        getUnreadInquiryCount(),
+        getUnreadInquiries()
+      ]);
+      setUnreadInquiryCount(countData.count || 0);
+      setRecentInquiries(unreadData.slice(0, 3)); // Get latest 3 unread inquiries
+    } catch (error) {
+      console.error('Error fetching inquiry data:', error);
+    } finally {
+      setInquiryLoading(false);
+    }
+  };
+
+  // Load jobs and inquiries on component mount
   useEffect(() => {
     fetchActiveJobs();
+    fetchInquiryData();
   }, []);
 
   return (
@@ -182,31 +207,132 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-          <div className="space-y-4">
-            <button
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
-              onClick={() => router.push('/post-job')}
-            >
-              <Package className="w-5 h-5 mr-2" />
-              Post a Job
-            </button>
-            <button 
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center" 
-              onClick={() => router.push('/jobs')}
-            >
-              <Users className="w-5 h-5 mr-2" />
-              All Jobs 
-            </button>
-            <button 
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
-              onClick={() => router.push('/applications')}
-            >
-              <Activity className="w-5 h-5 mr-2" />
-              Applications
-            </button>
+        {/* Sidebar with Quick Actions and Inquiries */}
+        <div className="space-y-6">
+          {/* Inquiry Widget */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2 text-blue-600" />
+                Inquiries
+              </h2>
+              <button 
+                onClick={() => router.push('/inquiries')}
+                className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center transition-colors duration-200"
+              >
+                View All
+                <ArrowUpRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+            
+            {/* Unread Count */}
+            <div className="mb-4">
+              {inquiryLoading ? (
+                <div className="animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-32"></div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-semibold text-blue-900">{unreadInquiryCount}</p>
+                      <p className="text-xs text-blue-600">Unread</p>
+                    </div>
+                  </div>
+                  {unreadInquiryCount > 0 && (
+                    <AlertCircle className="w-5 h-5 text-orange-500" />
+                  )}
+                </div>
+              )}
+            </div>
+            
+            {/* Recent Inquiries */}
+            <div className="space-y-2">
+              {inquiryLoading ? (
+                <div className="space-y-2">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-3 bg-gray-200 rounded w-full mb-1"></div>
+                      <div className="h-2 bg-gray-200 rounded w-3/4"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : recentInquiries.length > 0 ? (
+                recentInquiries.map((inquiry, index) => (
+                  <div 
+                    key={inquiry.id || index}
+                    className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                    onClick={() => router.push('/inquiries')}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 text-sm truncate">
+                          {inquiry.name || 'Anonymous'}
+                        </p>
+                        <p className="text-xs text-gray-600 truncate">
+                          {inquiry.email || 'No email'}
+                        </p>
+                      </div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full ml-2"></div>
+                    </div>
+                    {inquiry.message && (
+                      <p className="text-xs text-gray-500 mt-1 truncate">
+                        {inquiry.message.substring(0, 50)}...
+                      </p>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-4">
+                  <MessageSquare className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">No new inquiries</p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Quick Actions */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+            <div className="space-y-4">
+              <button
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
+                onClick={() => router.push('/post-job')}
+              >
+                <Package className="w-5 h-5 mr-2" />
+                Post a Job
+              </button>
+              <button 
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center" 
+                onClick={() => router.push('/jobs')}
+              >
+                <Users className="w-5 h-5 mr-2" />
+                All Jobs 
+              </button>
+              <button 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
+                onClick={() => router.push('/applications')}
+              >
+                <Activity className="w-5 h-5 mr-2" />
+                Applications
+              </button>
+              <button 
+                className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white p-4 rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
+                onClick={() => router.push('/inquiries')}
+              >
+                <MessageSquare className="w-5 h-5 mr-2" />
+                Inquiries
+                {unreadInquiryCount > 0 && (
+                  <span className="ml-2 bg-white text-orange-600 text-xs font-bold px-2 py-1 rounded-full">
+                    {unreadInquiryCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

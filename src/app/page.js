@@ -25,6 +25,8 @@ export default function LoginPage() {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (email === STATIC_EMAIL && password === STATIC_PASSWORD) {
+      // Set authentication flag in localStorage
+      localStorage.setItem('isAuthenticated', 'true');
       // Successful login - redirect to dashboard
       router.push('/dashboard');
     } else {

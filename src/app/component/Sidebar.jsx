@@ -10,7 +10,8 @@ import {
   Sparkles,
   Briefcase,
   FileText,
-  Users
+  Users,
+  MessageSquare
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -187,6 +188,38 @@ const Sidebar = () => {
                 )}
               </button>
 
+              {/* Inquiries Link */}
+              <button
+                onClick={() => handleNavigation('/inquiries')}
+                className={`relative flex items-center px-4 py-3.5 transition-all duration-300 rounded-xl mx-3 group overflow-hidden w-full ${
+                  pathname === '/inquiries'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 transform scale-[1.02]'
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:shadow-md hover:transform hover:scale-[1.01]'
+                }`}
+              >
+                {pathname === '/inquiries' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-xl blur-sm"></div>
+                )}
+                <MessageSquare className={`relative w-5 h-5 mr-3 transition-all duration-300 ${
+                  pathname === '/inquiries'
+                    ? 'text-white drop-shadow-sm'
+                    : 'text-gray-500 group-hover:text-blue-600 group-hover:scale-110'
+                }`} />
+                <span className={`relative font-medium transition-all duration-300 ${
+                  pathname === '/inquiries' ? 'text-white' : 'group-hover:font-semibold'
+                }`}>
+                  Inquiries
+                </span>
+                {pathname === '/inquiries' && (
+                  <div className="relative ml-auto flex items-center">
+                    <div className="w-2 h-2 bg-white rounded-full shadow-sm"></div>
+                  </div>
+                )}
+                {pathname !== '/inquiries' && (
+                  <ChevronRight className="relative ml-auto w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                )}
+              </button>
+
 
               {/* <button
                 onClick={() => handleNavigation('/visitors')}
@@ -226,7 +259,10 @@ const Sidebar = () => {
         {/* Logout Button */}
         <div className="px-6 pb-6">
           <button
-            onClick={() => router.push('/')}
+            onClick={() => {
+              localStorage.removeItem('isAuthenticated');
+              router.push('/');
+            }}
             className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 mt-4"
           >
             <X className="w-5 h-5" />
