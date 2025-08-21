@@ -16,7 +16,7 @@ export default function LoginPage() {
   const STATIC_EMAIL = 'infowebutsav@gmail.com';
   const STATIC_PASSWORD = 'infowebutsav@123';
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {  
     e.preventDefault();
     setIsLoading(true);
     setError('');

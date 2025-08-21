@@ -188,7 +188,7 @@ const Sidebar = () => {
               </button>
 
 
-              <button
+              {/* <button
                 onClick={() => handleNavigation('/visitors')}
                 className={`relative flex items-center px-4 py-3.5 transition-all duration-300 rounded-xl mx-3 group overflow-hidden w-full ${
                   pathname === '/visitors'
@@ -217,7 +217,7 @@ const Sidebar = () => {
                 {pathname !== '/visitors' && (
                   <ChevronRight className="relative ml-auto w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                 )}
-              </button>
+              </button> */}             
 
             </div>
           </div>
