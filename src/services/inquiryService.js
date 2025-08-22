@@ -1,6 +1,6 @@
 // Inquiry API Service
 // Base URL for inquiry API
-const BASE_URL = 'http://localhost:8282/api/inquiries';
+const BASE_URL = 'https://api.webutsav.com/api/inquiries';
 
 // Helper function to handle API responses
 const handleResponse = async (response) => {
